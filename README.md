@@ -28,7 +28,7 @@ To try the application on your local machine:
 
 ### Start the application
 
-`uvicorn main:app --reload`
+`uvicorn app.main:app --reload`
 
 ### Example call
 
