@@ -29,7 +29,7 @@ def analyze_with_highres(model_id: str, pdf_bytes: bytes, search_keyword: str):
 
     # キーワードが空の場合、解析結果をそのまま返却
     if not search_keyword:
-        return False, result.as_dict()
+        return None, result.as_dict()
 
     # キーワードが指定されている場合、指定されたキーワードを含むページのみを抽出
     for page in result.pages:
