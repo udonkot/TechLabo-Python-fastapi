@@ -2,10 +2,12 @@ from fastapi import FastAPI, File, Form, UploadFile, Request, status
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+import traceback
 import uvicorn
 import os
 from app.business.azure_document_service import analyze_with_highres
 
+# FastAPIの設定
 app = FastAPI()
 app.mount("/static", StaticFiles(directory=os.path.join(os.getcwd(), "app/static")), name="static")
 templates = Jinja2Templates(directory=os.path.join(os.getcwd(), "app/templates"))
@@ -41,21 +43,23 @@ async def analyze_pdf(file: UploadFile = File(...), keyword: str = Form(None)):
         pdf_bytes = await file.read()
 
         # Azure Document Intelligenceに送信
-        result = analyze_with_highres(
+        is_keyword_found, result = analyze_with_highres(
             model_id="prebuilt-layout",
             pdf_bytes=pdf_bytes,
             search_keyword=keyword
         )
 
         # 結果を処理して返却
-        print(pdf_bytes, type(pdf_bytes), keyword)
+        # print(f"{keyword=}, {is_keyword_found=}, {result=}")
         response_data = {
             "keyword": keyword,
-            "analyze_result": result
+            "isKeywordFound": is_keyword_found,
+            "analyzeResult": result
         }
         return JSONResponse(content=response_data)
 
     except Exception as e:
+        print(traceback.format_exc())
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 
