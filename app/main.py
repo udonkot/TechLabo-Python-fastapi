@@ -39,18 +39,19 @@ async def hello(request: Request, name: str = Form(...)):
 @app.post("/analyze-pdf")
 async def analyze_pdf(file: UploadFile = File(...), keyword: str = Form(None)):
     try:
+        # モデルID
+        model_id = "prebuilt-layout"
         # PDFファイルを読み込む
         pdf_bytes = await file.read()
 
         # Azure Document Intelligenceに送信
         is_keyword_found, result = analyze_with_highres(
-            model_id="prebuilt-layout",
+            model_id=model_id,
             pdf_bytes=pdf_bytes,
             search_keyword=keyword
         )
 
         # 結果を処理して返却
-        # print(f"{keyword=}, {is_keyword_found=}, {result=}")
         response_data = {
             "keyword": keyword,
             "isKeywordFound": is_keyword_found,
