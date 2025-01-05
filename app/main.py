@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import uvicorn
 import os
-from app.services.azure_document_service import analyze_with_highres
+from app.business.azure_document_service import analyze_with_highres
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory=os.path.join(os.getcwd(), "app/static")), name="static")
