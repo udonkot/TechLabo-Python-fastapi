@@ -20,7 +20,13 @@ If you need an Azure account, you can [create one for free](https://azure.micros
 
 ## Local Testing
 
-To try the application on your local machine:
+ルートフォルダに.envファイルを作成し、以下をコピペする。
+変数名はそのままに、値は適宜書き換える。
+
+```
+DOCUMENTINTELLIGENCE_API_KEY=<YOUR_API_KEY>
+DOCUMENTINTELLIGENCE_ENDPOINT=<YOUR_ENDPOINT>
+```
 
 ### Install the requirements
 
@@ -28,7 +34,7 @@ To try the application on your local machine:
 
 ### Start the application
 
-`uvicorn main:app --reload`
+`uvicorn app.main:app --reload`
 
 ### Example call
 

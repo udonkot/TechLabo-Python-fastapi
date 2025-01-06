@@ -1,0 +1,1 @@
+# Pydantic モデルや ORM モデル
