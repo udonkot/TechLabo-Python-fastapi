@@ -17,9 +17,9 @@ templates = Jinja2Templates(directory=os.path.join(os.getcwd(), "app/templates")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,   
-    allow_methods=["*"],      
-    allow_headers=["*"]       
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
 )
 
 @ app.get("/", response_class=HTMLResponse)
