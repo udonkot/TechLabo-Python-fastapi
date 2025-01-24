@@ -1,5 +1,5 @@
 from fastapi import FastAPI, File, Form, UploadFile, Request, status
-from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware 
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -10,11 +10,7 @@ from app.business.azure_document_service import analyze_with_highres
 
 # FastAPIの設定
 app = FastAPI()
-app.mount(
-    "/static",
-    StaticFiles(directory=os.path.join(os.getcwd(), "app/static")),
-    name="static",
-)
+app.mount("/static", StaticFiles(directory=os.path.join(os.getcwd(), "app/static")), name="static")
 templates = Jinja2Templates(directory=os.path.join(os.getcwd(), "app/templates"))
 
 # CORSを回避するための設定
@@ -23,39 +19,30 @@ app.add_middleware(
     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*"]
 )
 
-
-@app.get("/", response_class=HTMLResponse)
+@ app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    print("Request for index page received")
-    return templates.TemplateResponse("index.html", {"request": request})
+    print('Request for index page received')
+    return templates.TemplateResponse('index.html', {"request": request})
 
 
-@app.get("/favicon.ico")
+@ app.get('/favicon.ico')
 async def favicon():
-    file_name = "favicon.ico"
-    file_path = "./app/static/" + file_name
-    return FileResponse(
-        path=file_path, headers={"mimetype": "image/vnd.microsoft.icon"}
-    )
+    file_name = 'favicon.ico'
+    file_path = './app/static/' + file_name
+    return FileResponse(path=file_path, headers={'mimetype': 'image/vnd.microsoft.icon'})
 
 
-@app.post("/hello", response_class=HTMLResponse)
+@ app.post('/hello', response_class=HTMLResponse)
 async def hello(request: Request, name: str = Form(...)):
     if name:
-        print("Request for hello page received with name=%s" % name)
-        return templates.TemplateResponse(
-            "hello.html", {"request": request, "name": name}
-        )
+        print('Request for hello page received with name=%s' % name)
+        return templates.TemplateResponse('hello.html', {"request": request, 'name': name})
     else:
-        print(
-            "Request for hello page received with no name or blank name -- redirecting"
-        )
-        return RedirectResponse(
-            request.url_for("index"), status_code=status.HTTP_302_FOUND
-        )
+        print('Request for hello page received with no name or blank name -- redirecting')
+        return RedirectResponse(request.url_for("index"), status_code=status.HTTP_302_FOUND)
 
 
 @app.post("/analyze-pdf")
@@ -68,14 +55,16 @@ async def analyze_pdf(file: UploadFile = File(...), keyword: str = Form(None)):
 
         # Azure Document Intelligenceに送信
         is_keyword_found, result = analyze_with_highres(
-            model_id=model_id, pdf_bytes=pdf_bytes, search_keyword=keyword
+            model_id=model_id,
+            pdf_bytes=pdf_bytes,
+            search_keyword=keyword
         )
 
         # 結果を処理して返却
         response_data = {
             "keyword": keyword,
             "isKeywordFound": is_keyword_found,
-            "analyzeResult": result,
+            "analyzeResult": result
         }
         return JSONResponse(content=response_data)
 
@@ -84,5 +73,5 @@ async def analyze_pdf(file: UploadFile = File(...), keyword: str = Form(None)):
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000)
+if __name__ == '__main__':
+    uvicorn.run('main:app', host='0.0.0.0', port=8000)
