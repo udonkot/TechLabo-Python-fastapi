@@ -1,5 +1,5 @@
 from fastapi import FastAPI, File, Form, UploadFile, Request, status
-from starlette.middleware.cors import CORSMiddleware 
+from starlette.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -21,6 +21,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
+
 
 @ app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
