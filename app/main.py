@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, Form, UploadFile, Request, status
+from starlette.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -11,6 +12,15 @@ from app.business.azure_document_service import analyze_with_highres
 app = FastAPI()
 app.mount("/static", StaticFiles(directory=os.path.join(os.getcwd(), "app/static")), name="static")
 templates = Jinja2Templates(directory=os.path.join(os.getcwd(), "app/templates"))
+
+# CORSを回避するための設定
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 
 @ app.get("/", response_class=HTMLResponse)
